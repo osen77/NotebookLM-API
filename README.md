@@ -6,19 +6,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/notebooklm_automator)
 
-Automate Google NotebookLM through a REST API. Upload sources (URLs, YouTube videos, text) and generate AI-powered Audio Overviews (podcasts) programmatically—no manual clicking required.
+Automate Google NotebookLM through a REST API. Upload sources (URLs, YouTube videos, text) and generate AI-powered Audio Overviews (podcasts) programmatically-no manual clicking required.
 
 ---
 
 ## ✨ Features
 
-- **Source Management** — Upload URLs, YouTube videos, and text content to your notebook via API
-- **Audio Generation** — Trigger Audio Overview creation with custom styles and prompts
-- **Multiple Styles** — Choose from Deep Dive, Summary, Critique, or Debate formats
-- **Status Tracking** — Monitor generation progress and retrieve download URLs
-- **Multi-language UI** — Supports English and Hebrew NotebookLM interfaces automatically
-- **Auto Chrome Launch** — Optionally spawns and manages Chrome with remote debugging
-- **Comprehensive Tests** — Unit, API, UI, and E2E test suites included
+- **Source Management** - Upload URLs, YouTube videos, and text content to your notebook via API
+- **Audio Generation** - Trigger Audio Overview creation with custom styles and prompts
+- **Multiple Styles** - Choose from Deep Dive, Summary, Critique, or Debate formats
+- **Status Tracking** - Monitor generation progress and retrieve download URLs
+- **Multi-language UI** - Supports English and Hebrew NotebookLM interfaces automatically
+- **Auto Chrome Launch** - Optionally spawns and manages Chrome with remote debugging
+- **Comprehensive Tests** - Unit, API, UI, and E2E test suites included
 
 ---
 
@@ -75,7 +75,7 @@ All settings can be controlled via environment variables or a `.env` file:
 
 | Variable                          | Default                | Description                                          |
 | --------------------------------- | ---------------------- | ---------------------------------------------------- |
-| `NOTEBOOKLM_URL`                  | —                      | **(Required)** Full URL to your NotebookLM notebook  |
+| `NOTEBOOKLM_URL`                  | -                      | **(Required)** Full URL to your NotebookLM notebook  |
 | `NOTEBOOKLM_AUTO_LAUNCH_CHROME`   | `1`                    | Set to `0` to use an already-running Chrome instance |
 | `NOTEBOOKLM_CHROME_PATH`          | auto-detect            | Path to Chrome/Chromium executable                   |
 | `NOTEBOOKLM_CHROME_USER_DATA_DIR` | `~/.notebooklm-chrome` | Chrome profile directory for persistent login        |
@@ -134,9 +134,9 @@ Content-Type: application/json
 
 **Source Types:**
 
-- `url` — Web page URL
-- `youtube` — YouTube video URL
-- `text` — Raw text content
+- `url` - Web page URL
+- `youtube` - YouTube video URL
+- `text` - Raw text content
 
 ---
 
@@ -294,4 +294,4 @@ This project automates interactions with Google NotebookLM through browser autom
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
