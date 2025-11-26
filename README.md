@@ -4,6 +4,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Playwright](https://img.shields.io/badge/Playwright-1.40%2B-2EAD33.svg)](https://playwright.dev/python/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/notebooklm_automator)
 
 Automate Google NotebookLM through a REST API. Upload sources (URLs, YouTube videos, text) and generate AI-powered Audio Overviews (podcasts) programmatically—no manual clicking required.
 
