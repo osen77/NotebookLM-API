@@ -2,7 +2,7 @@
 
 import logging
 import time
-from typing import Any, Callable, Dict, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, Optional, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
@@ -243,8 +243,12 @@ class AudioManager:
         except Exception:
             return None
 
-    def download_file(self, job_id: str) -> Optional[bytes]:
-        """Download audio by clicking download and waiting for file."""
+    def download_file(self, job_id: str) -> Optional[Tuple[bytes, str, int]]:
+        """Download audio by clicking download and waiting for file.
+
+        Returns:
+            Tuple of (file_content, file_name, file_size) or None if failed.
+        """
         import os
 
         try:
@@ -336,6 +340,8 @@ class AudioManager:
             # Read the file
             with open(downloaded_file, "rb") as f:
                 body = f.read()
+                file_name = os.path.basename(downloaded_file)
+                file_size = os.path.getsize(downloaded_file)
 
             logger.info("Downloaded %d bytes from %s",
                         len(body), downloaded_file)
@@ -346,7 +352,7 @@ class AudioManager:
             except Exception:
                 pass
 
-            return body
+            return body, file_name, file_size
 
         except Exception as e:
             logger.error("Download failed: %s", e)

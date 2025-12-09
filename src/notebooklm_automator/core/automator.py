@@ -1,7 +1,7 @@
 """Main automator class for Google NotebookLM."""
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from playwright.sync_api import sync_playwright, Error as PlaywrightError
 
@@ -215,7 +215,7 @@ class NotebookLMAutomator:
         self.ensure_connected()
         return self._audio_manager.get_download_url(job_id)
 
-    def download_audio_file(self, job_id: str) -> Optional[bytes]:
+    def download_audio_file(self, job_id: str) -> Optional[Tuple[bytes, str, int]]:
         """
         Download the audio file by clicking Download in the UI.
 
@@ -223,7 +223,7 @@ class NotebookLMAutomator:
             job_id: The job ID of the audio to download.
 
         Returns:
-            Binary audio data or None if download failed.
+            Tuple of (file_content, file_name, file_size) or None if failed.
         """
         self.ensure_connected()
         return self._audio_manager.download_file(job_id)

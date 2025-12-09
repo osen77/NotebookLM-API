@@ -153,20 +153,23 @@ def download_audio_file(
         )
 
     # Download by clicking Download button in UI (uses browser's fast QUIC/HTTP3)
-    content = automator.download_audio_file(job_id)
+    result = automator.download_audio_file(job_id)
     automator.page.close()
 
-    if not content:
+    if not result:
         raise HTTPException(
             status_code=500,
             detail="Failed to download audio file",
         )
 
+    content, file_name, file_size = result
+
     return Response(
         content=content,
         media_type="audio/mp4",
         headers={
-            "Content-Disposition": f"attachment; filename=audio_{job_id}.mp4"
+            "Content-Disposition": f"attachment; filename={file_name}",
+            "Content-Length": str(file_size),
         },
     )
 
