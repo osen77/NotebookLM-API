@@ -207,7 +207,18 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,macos
-
-z/
-
 chrome-user-data/
+
+# Editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Local automation data
+.notebooklm-chrome/
+notebooklm-chrome/
+playwright-report/
+playwright/.cache/
+
+# Windows artifacts
+Thumbs.db
