@@ -162,6 +162,27 @@ class AudioManager:
         except Exception:
             pass
 
+    def _get_item_title(self, item) -> Optional[str]:
+        """Extract title from an artifact-library-item element."""
+        try:
+            # Try multiple selectors for maximum compatibility
+            title_selectors = [
+                ".artifact-title",
+                "span.artifact-title",
+                ".artifact-labels .artifact-title",
+                ".artifact-labels div span",
+                "span.mat-title-small",
+            ]
+            for selector in title_selectors:
+                title_el = item.locator(selector).first
+                if title_el.count() > 0 and title_el.is_visible():
+                    title = title_el.inner_text().strip()
+                    if title:
+                        return title
+            return None
+        except Exception:
+            return None
+
     def get_status(self, job_id: str) -> Dict[str, str]:
         """Check the status of an audio generation job."""
         self._ensure_studio_tab()
@@ -181,20 +202,23 @@ class AudioManager:
         item = children.nth(index)
         text_content = item.inner_text()
 
+        # Extract title
+        title = self._get_item_title(item)
+
         generating_text = self._get_text("generating_status_text")
         if "sync" in text_content or generating_text in text_content:
-            return {"status": "generating"}
+            return {"status": "generating", "title": title}
 
         if "play_arrow" in text_content or item.locator(
             "mat-icon:has-text('play_arrow')"
         ).is_visible():
-            return {"status": "completed"}
+            return {"status": "completed", "title": title}
 
         error_text = self._get_text("error_text")
         if "error" in text_content.lower() or error_text in text_content.lower():
-            return {"status": "failed"}
+            return {"status": "failed", "title": title}
 
-        return {"status": "unknown"}
+        return {"status": "unknown", "title": title}
 
     def get_download_url(self, job_id: str) -> Optional[str]:
         """Get the direct file URL for generated audio."""

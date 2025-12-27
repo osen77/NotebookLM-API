@@ -57,6 +57,7 @@ class GenerateAudioResponse(BaseModel):
 class AudioStatusResponse(BaseModel):
     job_id: str
     status: str  # pending, processing, completed, failed
+    title: Optional[str] = None
     download_url: Optional[str] = None
     error: Optional[str] = None
 

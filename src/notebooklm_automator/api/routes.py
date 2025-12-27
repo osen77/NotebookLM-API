@@ -227,6 +227,7 @@ def check_audio_status(
     return AudioStatusResponse(
         job_id=job_id,
         status=status_data["status"],
+        title=status_data.get("title"),
         download_url=download_url,
     )
 
