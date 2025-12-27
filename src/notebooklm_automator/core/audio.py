@@ -17,11 +17,35 @@ class AudioManager:
         self.page = page
         self._get_text = get_text
 
+    def _close_any_dialog(self) -> None:
+        """Close any open dialog that might block tab clicks."""
+        try:
+            # Check for open mat-dialog-container
+            dialog = self.page.locator("mat-dialog-container").last
+            if dialog.count() > 0 and dialog.is_visible():
+                # Try close button first
+                close_btn = self.page.locator(
+                    "button:has(mat-icon:has-text('close'))"
+                ).first
+                if close_btn.count() > 0 and close_btn.is_visible():
+                    close_btn.click()
+                    self.page.wait_for_timeout(200)
+                    return
+
+                # Fallback: press Escape
+                self.page.keyboard.press("Escape")
+                self.page.wait_for_timeout(200)
+        except Exception:
+            pass
+
     def _ensure_studio_tab(self) -> None:
         """Switch to Studio tab if artifact-library is not visible (tab mode)."""
         parent = self.page.locator("artifact-library")
         if parent.count() > 0:
             return  # Already in full layout or Studio tab
+
+        # Close any open dialog that might block tab clicks
+        self._close_any_dialog()
 
         # Try to click Studio tab using Angular Material tab selector
         studio_text = self._get_text("studio_tab")

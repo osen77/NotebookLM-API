@@ -46,6 +46,9 @@ class SourceManager:
         if source_items.count() > 0 or (add_btn.count() > 0 and add_btn.is_visible()):
             return  # Already in full layout or Sources tab
 
+        # Close any open dialog that might block tab clicks
+        self.close_dialog()
+
         # Try to click Sources tab using Angular Material tab selector
         sources_text = self._get_text("sources_tab")
         # Priority 1: mat-tab-label with text (Angular Material tabs)
