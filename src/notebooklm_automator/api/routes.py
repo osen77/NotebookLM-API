@@ -138,7 +138,12 @@ def download_audio_file(
     """Download audio file as binary data.
 
     Returns the actual audio file content as binary data.
+    In browserless mode, downloads via HTTP from the captured URL.
+    In CDP mode, uses filesystem-based download.
     """
+    import requests
+    from urllib.parse import quote
+
     status_data = automator.get_audio_status(job_id)
 
     if status_data["status"] != "completed":
@@ -147,19 +152,42 @@ def download_audio_file(
             detail="Audio generation not completed or failed",
         )
 
-    # Download by clicking Download button in UI (uses browser's fast QUIC/HTTP3)
-    result = automator.download_audio_file(job_id)
+    # Check if using browserless (WebSocket) mode
+    ws_endpoint = os.getenv("BROWSER_WS_ENDPOINT")
 
-    if not result:
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to download audio file",
-        )
+    if ws_endpoint:
+        # Browserless mode: download via HTTP from captured URL
+        url = automator.get_download_url(job_id)
+        if not url:
+            raise HTTPException(
+                status_code=500,
+                detail="Could not retrieve download URL",
+            )
 
-    content, file_name, file_size = result
+        try:
+            resp = requests.get(url, timeout=120)
+            resp.raise_for_status()
+            content = resp.content
+            file_size = len(content)
+            # Extract filename from URL or use default
+            file_name = f"audio_{job_id}.mp4"
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to download audio from URL: {str(e)}",
+            )
+    else:
+        # CDP mode: download by clicking Download button in UI
+        result = automator.download_audio_file(job_id)
 
-    # Use RFC 5987 encoding for non-ASCII filenames
-    from urllib.parse import quote
+        if not result:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to download audio file",
+            )
+
+        content, file_name, file_size = result
+
     encoded_filename = quote(file_name, safe='')
 
     # Provide both ASCII fallback and UTF-8 encoded filename
