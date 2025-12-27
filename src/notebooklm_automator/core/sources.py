@@ -37,6 +37,25 @@ class SourceManager:
         self.page = page
         self._get_text = get_text
 
+    def _ensure_sources_tab(self) -> None:
+        """Switch to Sources tab if source elements are not visible (tab mode)."""
+        # Check if sources panel is visible
+        source_items = self.page.locator("div.single-source-container")
+        add_btn = self.page.locator(
+            f"button:has-text('{self._get_text('add_source_button')}')"
+        ).first
+
+        if source_items.count() > 0 or (add_btn.count() > 0 and add_btn.is_visible()):
+            return  # Already in full layout or Sources tab
+
+        # Try to click Sources tab
+        sources_text = self._get_text("sources_tab")
+        sources_tab = self.page.locator(f"button:has-text('{sources_text}')").first
+        if sources_tab.count() > 0 and sources_tab.is_visible():
+            logger.info("Switching to Sources tab...")
+            sources_tab.click()
+            self.page.wait_for_timeout(500)
+
     def is_dialog_open(self) -> bool:
         """Check if the add source dialog is open."""
         try:
@@ -173,6 +192,7 @@ class SourceManager:
 
     def add_sources(self, sources: List[Dict[str, str]]) -> List[Dict[str, Any]]:
         """Add multiple sources to the notebook."""
+        self._ensure_sources_tab()
         self.close_dialog()
         results = []
 
@@ -202,6 +222,8 @@ class SourceManager:
 
     def clear_sources(self) -> Dict[str, Any]:
         """Clear all sources from the notebook."""
+        self._ensure_sources_tab()
+
         removed = 0
 
         def get_source_items():

@@ -35,6 +35,8 @@ _SELECTORS_BY_KEY: Final[SelectorsByKey] = {
     "debate_radio_button": {"en": "Debate", "he": "דיבייט", "zh": "辩论"},
     "duration_short": {"en": "Short", "he": "קצר", "zh": "短"},
     "duration_default": {"en": "Default", "he": "ברירת מחדל", "zh": "默认"},
+    "studio_tab": {"en": "Studio", "he": "סטודיו", "zh": "Studio"},
+    "sources_tab": {"en": "Sources", "he": "מקורות", "zh": "来源"},
 }
 
 

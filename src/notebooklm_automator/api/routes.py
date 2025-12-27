@@ -61,6 +61,9 @@ def debug_status(automator: NotebookLMAutomator = Depends(get_automator)):
         debug_info = {}
 
         try:
+            # Ensure we're on Studio tab before checking audio elements
+            automator._audio_manager._ensure_studio_tab()
+
             # Check if artifact-library exists
             parent = page.locator("artifact-library")
             artifact_library_exists = parent.count() > 0

@@ -17,6 +17,20 @@ class AudioManager:
         self.page = page
         self._get_text = get_text
 
+    def _ensure_studio_tab(self) -> None:
+        """Switch to Studio tab if artifact-library is not visible (tab mode)."""
+        parent = self.page.locator("artifact-library")
+        if parent.count() > 0:
+            return  # Already in full layout or Studio tab
+
+        # Try to click Studio tab
+        studio_text = self._get_text("studio_tab")
+        studio_tab = self.page.locator(f"button:has-text('{studio_text}')").first
+        if studio_tab.count() > 0 and studio_tab.is_visible():
+            logger.info("Switching to Studio tab...")
+            studio_tab.click()
+            self.page.wait_for_timeout(500)
+
     def generate(
         self,
         style: Optional[str] = None,
@@ -25,6 +39,8 @@ class AudioManager:
         duration: Optional[str] = None,
     ) -> str:
         """Generate an audio overview and return a job ID."""
+        self._ensure_studio_tab()
+
         edit_icon = self.page.locator(
             "mat-icon:has-text('edit'), mat-icon.edit-button-icon"
         ).first
@@ -135,6 +151,8 @@ class AudioManager:
 
     def get_status(self, job_id: str) -> Dict[str, str]:
         """Check the status of an audio generation job."""
+        self._ensure_studio_tab()
+
         try:
             index = int(job_id) - 1
         except ValueError:
@@ -167,6 +185,8 @@ class AudioManager:
 
     def get_download_url(self, job_id: str) -> Optional[str]:
         """Get the direct file URL for generated audio."""
+        self._ensure_studio_tab()
+
         try:
             index = int(job_id) - 1
         except ValueError:
@@ -263,6 +283,8 @@ class AudioManager:
             Tuple of (file_content, file_name, file_size) or None if failed.
         """
         import os
+
+        self._ensure_studio_tab()
 
         try:
             index = int(job_id) - 1
@@ -375,6 +397,8 @@ class AudioManager:
 
     def clear_studio(self) -> Dict[str, Any]:
         """Delete all generated audio items."""
+        self._ensure_studio_tab()
+
         removed = 0
         parent = self.page.locator("artifact-library")
         if parent.count() == 0:
