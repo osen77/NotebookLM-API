@@ -237,18 +237,20 @@ class NotebookLMAutomator:
 
             if preferred_account:
                 # Click on the account with matching email
+                # Google uses div[data-identifier] with role="link" for account items
                 account_item = self.page.locator(
-                    f"[data-email='{preferred_account}'], "
-                    f"li:has-text('{preferred_account}'), "
                     f"div[data-identifier='{preferred_account}']"
                 ).first
                 if account_item.count() > 0:
                     logger.info(f"Selecting account: {preferred_account}")
                     account_item.click()
                 else:
-                    # Fallback: try text matching
-                    account_item = self.page.get_by_text(preferred_account).first
+                    # Fallback: try matching by email text in the list
+                    account_item = self.page.locator(
+                        f"li:has(div[data-email='{preferred_account}'])"
+                    ).first
                     if account_item.count() > 0:
+                        logger.info(f"Selecting account (fallback): {preferred_account}")
                         account_item.click()
                     else:
                         logger.warning(
@@ -257,8 +259,9 @@ class NotebookLMAutomator:
                         return
             else:
                 # No preferred account, click the first available account
+                # Account items are div elements with data-identifier attribute
                 first_account = self.page.locator(
-                    "ul li[role='link'], div[data-identifier]"
+                    "div[data-identifier][role='link']"
                 ).first
                 if first_account.count() > 0:
                     logger.info("No preferred account set, selecting first account")
