@@ -287,10 +287,12 @@ def find_cookiecloud_file() -> Optional[str]:
 
     # Priority 2: default directory
     default_file = get_default_cookies_dir() / COOKIECLOUD_FILE
+    logger.debug(f"Checking CookieCloud file at: {default_file}")
     if default_file.exists():
         logger.info(f"Using CookieCloud file from default location: {default_file}")
         return str(default_file)
 
+    logger.debug(f"CookieCloud file not found at default location: {default_file}")
     return None
 
 
